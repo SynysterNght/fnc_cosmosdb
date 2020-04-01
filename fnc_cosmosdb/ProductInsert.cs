@@ -1,19 +1,21 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace fnc_cosmosdb
 {
-    public static class ProductInsert
+    using System;
+    using System.IO;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Azure.WebJobs;
+    using Microsoft.Azure.WebJobs.Extensions.Http;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.Logging;
+    using Newtonsoft.Json;
+    using fnc_cosmosdb.Models;
+
+    public class ProductInsert
     {
         [FunctionName(nameof(ProductInsert))]
-        public static async Task<IActionResult> Run(
+        public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous,  "post", Route = null)] HttpRequest req,
             ILogger log)
         {
@@ -22,12 +24,18 @@ namespace fnc_cosmosdb
             
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            string name =  data?.name;
+            var data = JsonConvert.DeserializeObject<Product>(requestBody);
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+            var product = new Product
+            {
+                ProductId = data.ProductId,
+                Provider=data.Provider,
+                Name=data.Name,
+                Price=data.Price
+                
+            };
+
+            string responseMessage = product.Name;
 
             return new OkObjectResult(responseMessage);
         }
