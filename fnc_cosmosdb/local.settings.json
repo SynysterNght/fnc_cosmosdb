@@ -1,0 +1,8 @@
+{
+    "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "StrCosmos": "AccountEndpoint=https://syncosmos.documents.azure.com:443/;AccountKey=VcsTQ8IU795lDJzpn1KytrhQaPXVrZbtFSA095OSL51CDzwCHYmx46J2cbdFg3LqxJUNfkzR9JSRDE7NTIbKZw==;"
+  }
+}
